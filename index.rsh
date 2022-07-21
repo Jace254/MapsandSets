@@ -92,7 +92,6 @@ export const main = Reach.App(() => {
           const who = this;
           k(null);
           entrants.remove(who);
-          Creator.interact.
           transfer(balance(JSH), JSH).to(who);
           return [ unpaidEntrants - 1, true];
         }]
