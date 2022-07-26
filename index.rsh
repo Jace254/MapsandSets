@@ -71,34 +71,29 @@ export const main = Reach.App(() => {
     });
 
 
-  const payout = supply/entries;
+  commit();
   Creator.interact.reward();
+  Creator.pay([[supply,JSH]]);
 
   const 
   [ unpaidEntrants,
     isPaying ] = 
       parallelReduce([ entries, true ])
       .invariant(entries <= maxEntries)
-      .paySpec([JSH])
       .while(isPaying && unpaidEntrants > 0)
-      .case(Creator, 
-        ( ) => ({when: declassify(interact.paying())}),
-        (_) => [0, [payout,JSH] ],
-        (_) => { return [unpaidEntrants,true]; }
-      )
       .api_(Entrant.receiveToken, () => {
         check(entrants.member(this))
-        return[[0,[0,JSH]],(k) => {
+        return[(k) => {
           const who = this;
           k(null);
           entrants.remove(who);
-          transfer(balance(JSH), JSH).to(who);
+          transfer([[2, JSH]]).to(who);
           return [ unpaidEntrants - 1, true];
         }]
       })
       .timeout(false)
 
-  transfer(balance(JSH),JSH).to(Creator);
+  transfer([[balance(JSH),JSH]]).to(Creator);
   transfer(balance()).to(Creator);
   commit();
   exit();
