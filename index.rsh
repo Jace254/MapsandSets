@@ -87,7 +87,8 @@ export const main = Reach.App(() => {
           const who = this;
           k(null);
           entrants.remove(who);
-          transfer([[2, JSH]]).to(who);
+          check([[balance(JSH),JSH]] >= [[1,JSH]])
+          transfer([[1, JSH]]).to(who);
           return [ unpaidEntrants - 1, true];
         }]
       })
